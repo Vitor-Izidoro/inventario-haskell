@@ -36,3 +36,27 @@ removeItem tempo idRemover qtdRemover inv =
                             else Map.insert idRemover itemAtualizado inv
                         logEntry = LogEntry tempo Remove ("Removidas " ++ show qtdRemover ++ " unidade(s) de: " ++ nome itemAtual) Sucesso
                     in Right (novoInv, logEntry)
+
+-- 3. Lógica para Atualizar a Quantidade de um Item
+updateQty :: UTCTime -> String -> Int -> Inventario -> Either String ResultadoOperacao
+updateQty tempo idAtualizar novaQuantidade inv =
+    case Map.lookup idAtualizar inv of
+        Nothing -> Left "Erro: Item nao encontrado no inventario."
+        Just itemAtual ->
+            if novaQuantidade < 0
+            then Left "Erro: Quantidade atualizada nao pode ser negativa."
+            else
+                let itemAtualizado = itemAtual { quantidade = novaQuantidade }
+                    novoInv =
+                        if novaQuantidade == 0
+                        then Map.delete idAtualizar inv
+                        else Map.insert idAtualizar itemAtualizado inv
+                    logEntry = LogEntry tempo Update ("Atualizada quantidade de " ++ nome itemAtual ++ " para " ++ show novaQuantidade) Sucesso
+                in Right (novoInv, logEntry)
+
+-- 4. Lógica para Consultar um Item no Inventário
+buscarItem :: String -> Inventario -> Either String Item
+buscarItem idBusca inv =
+    case Map.lookup idBusca inv of
+        Nothing -> Left "Erro: Item nao encontrado no inventario."
+        Just itemEncontrado -> Right itemEncontrado
