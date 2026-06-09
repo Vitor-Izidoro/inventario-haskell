@@ -3,7 +3,7 @@ module Tipos where
 import Data.Map (Map)
 import Data.Time.Clock (UTCTime)
 
--- 1. Item: Registro básico do domínio
+-- item: Registro básico do domínio
 data Item = Item {
     itemID     :: String,
     nome       :: String,
@@ -11,22 +11,22 @@ data Item = Item {
     categoria  :: String
 } deriving (Show, Read, Eq)
 
--- 2. Inventario: Estrutura de dados para armazenar os itens
+-- inventario: Estrutura de dados para armazenar os itens
 type Inventario = Map String Item
 
--- 3. AcaoLog: Tipo de dado algébrico (ADT) para as ações
+-- acaoLog: Tipo de dado algébrico (ADT) para as ações
 data AcaoLog = Add 
              | Remove 
              | Update 
              | QueryFail
              deriving (Show, Read, Eq)
 
--- 4. StatusLog: ADT para o resultado da operação
+-- statusLog: ADT para o resultado da operação
 data StatusLog = Sucesso 
                | Falha String
                deriving (Show, Read, Eq)
 
--- 5. LogEntry: Registro completo para auditoria
+-- logEntry: Registro completo para auditoria
 data LogEntry = LogEntry {
     timestamp :: UTCTime,
     acao      :: AcaoLog,
