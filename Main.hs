@@ -16,7 +16,7 @@ salvarEstado inv logEntry = do
     appendFile "Auditoria.log" (show logEntry ++ "\n")
 
 registrarFalhaLog :: LogEntry -> IO ()
-registrarFalhaLog logEntry = 
+registrarFalhaLog logEntry =
     appendFile "Auditoria.log" (show logEntry ++ "\n")
 
 -- Loop Interativo
@@ -27,10 +27,10 @@ loop inv = do
     putStrLn "2. Sair"
     putStr "Escolha uma opcao: "
     hFlush stdout
-    
+
     opcao <- getLine
     tempoAtual <- getCurrentTime
-    
+
     case opcao of
         "1" -> do
             let novoItem = Item "001" "Mouse" 50 "Perifericos"
@@ -40,14 +40,14 @@ loop inv = do
                     salvarEstado novoInv logGerado
                     putStrLn ">>> Sucesso! Salvo no disco."
                     loop novoInv
-                
+
                 Left erroMsg -> do
                     putStrLn $ ">>> FALHA: " ++ erroMsg
                     registrarFalhaLog (LogEntry tempoAtual Add erroMsg (Falha erroMsg))
                     loop inv
-                    
+
         "2" -> putStrLn "Saindo..."
-        
+
         _ -> do
             putStrLn "Opcao invalida."
             loop inv
@@ -56,11 +56,11 @@ loop inv = do
 main :: IO ()
 main = do
     conteudo <- catch (readFile "Inventario.dat") tratandoErroLeitura
-    
-    let invInicial = if conteudo == "" 
-                     then Map.empty 
+
+    let invInicial = if conteudo == ""
+                     then Map.empty
                      else read conteudo :: Inventario
-    
+
     putStrLn $ "Iniciado com " ++ show (Map.size invInicial) ++ " item(ns)."
     loop invInicial
   where
